@@ -1,0 +1,127 @@
+@os_base_url=http://localhost:9200
+
+### Setup
+
+### Create Movies index with explicit mapping
+PUT {{os_base_url}}/movies
+Content-Type: application/json
+
+{
+    "mappings": {
+        "properties": {
+            "title": { "type": "text" },
+            "description": { "type": "text" },
+            "year_released": { "type": "integer" }
+        }
+    }
+}
+
+### ADMIN
+
+### Get indices info
+GET {{os_base_url}}/_cat/indices
+
+### Drop Movies index
+DELETE {{os_base_url}}/movies
+
+### Opensearch Queries
+
+### Index movie
+POST {{os_base_url}}/movies/_doc
+Content-Type: application/json
+
+{
+    "title": "First Blood",
+    "year_released": 1982
+}
+
+
+### Search for title
+GET {{os_base_url}}/movies/_search
+Content-Type: application/json
+
+{
+    "query": {
+        "match": {
+            "title": "First"
+        }
+    }
+}
+
+### LTR - Initialise default feature store
+PUT {{os_base_url}}/_ltr
+
+### LTR - Initialise moviefeatureset Feature Set
+POST {{os_base_url}}/_ltr/_featureset/moviefeatureset
+Content-Type: application/json
+
+{
+   "featureset": {
+        "features": [
+            {
+                "name": "title_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "title": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "description_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "description": "{{query_text}}"
+                    }
+                }
+            }
+        ]
+   }
+}
+
+### LTR - List all features in the featureset
+GET {{os_base_url}}/_ltr/_featureset
+
+# ### Delete default feature store
+# DELETE {{os_base_url}}/_ltr
+
+### LTR Feature Logging - SLTR Query
+GET {{os_base_url}}/movies/_search
+Content-Type: application/json
+
+{
+  "query": {
+      "bool": {
+        "filter" : [
+            {
+                "sltr" : {
+                    "featureset" : "moviefeatureset",
+                    "_name": "logged_featureset",
+                    "active_features" : [ 
+                        "title_query",
+                        "description_query"
+                    ],
+                    "params": {
+                        "query_text": "First"
+                    }
+                }
+            }
+        ]
+      }
+  },
+  "ext": {
+        "ltr_log": {
+            "log_specs": {
+                "name": "log_entry1",
+                "named_query": "logged_featureset"
+            }
+        }
+    }
+}
