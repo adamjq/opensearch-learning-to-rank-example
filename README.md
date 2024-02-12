@@ -101,18 +101,6 @@ Content-Type: application/json
                         "description": "{{query_text}}"
                     }
                 }
-            },
-            {
-                "name": "year_released_query",
-                "params": [
-                    "query_text"
-                ],
-                "template_language": "mustache",
-                "template": {
-                    "match": {
-                        "year_released": "{{query_text}}"
-                    }
-                }
             }
         ]
    }
