@@ -36,6 +36,25 @@ Content-Type: application/json
     "year_released": 1982
 }
 
+### Index another movie
+POST {{os_base_url}}/movies/_doc
+Content-Type: application/json
+
+{
+    "title": "Rambo III",
+    "description": "Rambo mounts a one-man mission to rescue his friend Colonel Trautman from the clutches of the formidable invading Soviet forces in Afghanistan.",
+    "year_released": 1988
+}
+
+### Index another movie
+POST {{os_base_url}}/movies/_doc
+Content-Type: application/json
+
+{
+    "title": "Rambo: First Blood Part II",
+    "description": "Rambo returns to the jungles of Vietnam on a mission to infiltrate an enemy base-camp and rescue the American POWs still held captive there.",
+    "year_released": 1985
+}
 
 ### Search for title
 GET {{os_base_url}}/movies/_search
@@ -100,6 +119,11 @@ Content-Type: application/json
 {
   "query": {
       "bool": {
+        "must": { 
+            "match": {
+                "title": "First"
+            }
+        },
         "filter" : [
             {
                 "sltr" : {
@@ -135,6 +159,11 @@ Content-Type: application/json
   "profile": true,  
   "query": {
       "bool": {
+        "must": { 
+            "match": {
+                "title": "First"
+            }
+        },
         "filter" : [
             {
                 "sltr" : {
