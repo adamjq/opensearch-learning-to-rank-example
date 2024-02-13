@@ -32,6 +32,7 @@ Content-Type: application/json
 
 {
     "title": "First Blood",
+    "description": "First Blood is a 1982 American-Canadian action directed by Ted Kotcheff and co-written by and starring Sylvester Stallone as Vietnam War veteran John Rambo.",
     "year_released": 1982
 }
 
@@ -125,3 +126,42 @@ Content-Type: application/json
         }
     }
 }
+
+### LTR Feature Logging - SLTR Query with profiling
+GET {{os_base_url}}/movies/_search
+Content-Type: application/json
+
+{
+  "profile": true,  
+  "query": {
+      "bool": {
+        "filter" : [
+            {
+                "sltr" : {
+                    "featureset" : "moviefeatureset",
+                    "_name": "logged_featureset",
+                    "active_features" : [ 
+                        "title_query",
+                        "description_query"
+                    ],
+                    "params": {
+                        "query_text": "First"
+                    }
+                }
+            }
+        ]
+      }
+  },
+  "ext": {
+        "ltr_log": {
+            "log_specs": {
+                "name": "log_entry1",
+                "named_query": "logged_featureset"
+            }
+        }
+    }
+}
+
+### GET LTR Stats
+# https://github.com/o19s/elasticsearch-learning-to-rank/pull/308
+GET {{os_base_url}}/_ltr/_stats
