@@ -21,8 +21,11 @@ Content-Type: application/json
 ### Get indices info
 GET {{os_base_url}}/_cat/indices
 
-### Drop Movies index
-DELETE {{os_base_url}}/movies
+### Get Plugin info
+GET {{os_base_url}}/_cat/plugins?v=true&pretty"
+
+# ### Drop Movies index
+# DELETE {{os_base_url}}/movies
 
 ### Opensearch Queries
 
