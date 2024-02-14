@@ -1,6 +1,14 @@
 @os_base_url=http://localhost:9200
 
-### Setup
+### ADMIN
+
+### Get indices info
+GET {{os_base_url}}/_cat/indices
+
+### Get Plugin info
+GET {{os_base_url}}/_cat/plugins?v=true&pretty
+
+### Opensearch Queries
 
 ### Create Movies index with explicit mapping
 PUT {{os_base_url}}/movies
@@ -16,18 +24,8 @@ Content-Type: application/json
     }
 }
 
-### ADMIN
-
-### Get indices info
-GET {{os_base_url}}/_cat/indices
-
-### Get Plugin info
-GET {{os_base_url}}/_cat/plugins?v=true&pretty"
-
 # ### Drop Movies index
 # DELETE {{os_base_url}}/movies
-
-### Opensearch Queries
 
 ### Index movie
 POST {{os_base_url}}/movies/_doc
