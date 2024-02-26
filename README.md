@@ -26,8 +26,8 @@ Run:
 ## 2. Create a movies index with documents
 
 Create an index with an explicit mapping template:
-```json
-PUT /movies
+```sh
+curl -X PUT "http://localhost:9200/movies" -H 'Content-Type: application/json' -d'
 {
     "mappings": {
         "properties": {
@@ -36,45 +36,43 @@ PUT /movies
             "year_released": { "type": "integer" }
         }
     }
-}
+}'
 ```
 
 - `curl http://localhost:9200/movies` to check the index was created successfully
 
 Index a document:
-```json
-POST movies/_doc
+```sh
+curl -X POST "http://localhost:9200/_doc" -H 'Content-Type: application/json' -d'
 {
     "title": "First Blood",
     "year_released": 1982
-}
+}'
 ```
 
 Search for a movie:
-```json
-GET movies/_search
+```sh
+curl -X GET "http://localhost:9200/_search" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match": {
             "title": "First"
         }
     }
-}
+}'
 ```
 
 
 ## 3. Set up an LTR feature store
 
 Set up default featureset index:
-```
-PUT _ltr
+```sh
+curl -X PUT "http://localhost:9200/_ltr" -H 'Content-Type: application/json'
 ```
 
 Create a feature set called `moviefeatureset`:
-```json
-POST _ltr/_featureset/moviefeatureset
-Content-Type: application/json
-
+```sh
+curl -X POST "http://localhost:9200/_ltr/_featureset/moviefeatureset" -H 'Content-Type: application/json' -d'
 {
    "featureset": {
         "features": [
@@ -104,62 +102,28 @@ Content-Type: application/json
             }
         ]
    }
-}
+}'
 ```
+
+Run `curl http://localhost:9200/_ltr/_featureset` to see registered features in the featureset.
 
 ## 4. Run a query to get logged features
 
 First, run a simple text query:
-```json
-GET movies/_search
-Content-Type: application/json
-
+```sh
+curl -X GET "http://localhost:9200/movies/_search" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match": {
             "title": "First"
         }
     }
-}
-```
-
-Result:
-```json
-{
-  "took": 13,
-  "timed_out": false,
-  "_shards": {
-    "total": 1,
-    "successful": 1,
-    "skipped": 0,
-    "failed": 0
-  },
-  "hits": {
-    "total": {
-      "value": 1,
-      "relation": "eq"
-    },
-    "max_score": 0.2876821,
-    "hits": [
-      {
-        "_index": "movies",
-        "_id": "rfzam40Bbf4EFOUV1cUr",
-        "_score": 0.2876821,
-        "_source": {
-          "title": "First Blood",
-          "year_released": 1982
-        }
-      }
-    ]
-  }
-}
+}'
 ```
 
 Now, run a query with an SLTR filter to get logged features back:
-```json
-GET movies/_search
-Content-Type: application/json
-
+```sh
+curl -X GET "http://localhost:9200/movies/_search" -H 'Content-Type: application/json' -d'
 {
   "query": {
       "bool": {
@@ -188,7 +152,7 @@ Content-Type: application/json
             }
         }
     }
-}
+}'
 ```
 
 Result:

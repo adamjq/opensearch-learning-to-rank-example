@@ -192,6 +192,46 @@ Content-Type: application/json
     }
 }
 
+
+### LTR Feature Logging - SLTR Query with rescore
+GET {{os_base_url}}/movies/_search
+Content-Type: application/json
+
+{
+    "profile": true,  
+    "query": {
+        "match": {
+            "title": "First"
+        }
+    },
+    "rescore": {
+        "window_size": 1000,
+        "query": {
+            "rescore_query": {
+                "sltr" : {
+                    "featureset" : "moviefeatureset",
+                    "_name": "logged_featureset",
+                    "active_features" : [ 
+                        "title_query",
+                        "description_query"
+                    ],
+                    "params": {
+                        "query_text": "First"
+                    }
+                }
+            }
+        }
+    },
+    "ext": {
+        "ltr_log": {
+            "log_specs": {
+                "name": "log_entry1",
+                "named_query": "logged_featureset"
+            }
+        }
+    }
+}
+
 ### GET LTR Stats
 # https://github.com/o19s/elasticsearch-learning-to-rank/pull/308
 GET {{os_base_url}}/_ltr/_stats
