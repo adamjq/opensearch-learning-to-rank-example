@@ -27,7 +27,7 @@ Run:
 
 Create an index with an explicit mapping template:
 ```sh
-curl -X PUT "http://localhost:9200/movies" -H 'Content-Type: application/json' -d'
+curl -X PUT "http://localhost:9200/movies?pretty=true" -H 'Content-Type: application/json' -d'
 {
     "mappings": {
         "properties": {
@@ -43,7 +43,7 @@ curl -X PUT "http://localhost:9200/movies" -H 'Content-Type: application/json' -
 
 Index a document:
 ```sh
-curl -X POST "http://localhost:9200/_doc" -H 'Content-Type: application/json' -d'
+curl -X POST "http://localhost:9200/movies/_doc?pretty=true" -H 'Content-Type: application/json' -d'
 {
     "title": "First Blood",
     "year_released": 1982
@@ -52,7 +52,7 @@ curl -X POST "http://localhost:9200/_doc" -H 'Content-Type: application/json' -d
 
 Search for a movie:
 ```sh
-curl -X GET "http://localhost:9200/_search" -H 'Content-Type: application/json' -d'
+curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match": {
@@ -67,12 +67,12 @@ curl -X GET "http://localhost:9200/_search" -H 'Content-Type: application/json' 
 
 Set up default featureset index:
 ```sh
-curl -X PUT "http://localhost:9200/_ltr" -H 'Content-Type: application/json'
+curl -X PUT "http://localhost:9200/_ltr?pretty=true" -H 'Content-Type: application/json'
 ```
 
 Create a feature set called `moviefeatureset`:
 ```sh
-curl -X POST "http://localhost:9200/_ltr/_featureset/moviefeatureset" -H 'Content-Type: application/json' -d'
+curl -X POST "http://localhost:9200/_ltr/_featureset/moviefeatureset?pretty=true" -H 'Content-Type: application/json' -d'
 {
    "featureset": {
         "features": [
@@ -105,13 +105,13 @@ curl -X POST "http://localhost:9200/_ltr/_featureset/moviefeatureset" -H 'Conten
 }'
 ```
 
-Run `curl http://localhost:9200/_ltr/_featureset` to see registered features in the featureset.
+Run `curl http://localhost:9200/_ltr/_featureset?pretty=true` to see registered features in the featureset.
 
 ## 4. Run a query to get logged features
 
 First, run a simple text query:
 ```sh
-curl -X GET "http://localhost:9200/movies/_search" -H 'Content-Type: application/json' -d'
+curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match": {
@@ -123,7 +123,7 @@ curl -X GET "http://localhost:9200/movies/_search" -H 'Content-Type: application
 
 Now, run a query with an SLTR filter to get logged features back:
 ```sh
-curl -X GET "http://localhost:9200/movies/_search" -H 'Content-Type: application/json' -d'
+curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "query": {
       "bool": {
