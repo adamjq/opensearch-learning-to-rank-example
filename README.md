@@ -21,38 +21,18 @@ NOTE: To use the OpenSearch image with a custom plugin, you must first create a 
 
 Run:
 - `docker compose up`
-- `curl http://localhost:9200/_cat/indices` to check the cluster
+- `curl http://localhost:9200` in a new terminal to check the cluster
 
-## 2. Create a movies index with documents
+## 2. Create index mapping and bulk index data
 
-Create an index with an explicit mapping template:
 ```sh
-curl -X PUT "http://localhost:9200/movies?pretty=true" -H 'Content-Type: application/json' -d'
-{
-    "mappings": {
-        "properties": {
-            "title": { "type": "text" },
-            "description": { "type": "text" },
-            "year_released": { "type": "integer" }
-        }
-    }
-}'
+./bin/index.sh
 ```
 
-- `curl http://localhost:9200/movies` to check the index was created successfully
+Search for a movie to confirm it worked:
 
-Index a document:
 ```sh
-curl -X POST "http://localhost:9200/movies/_doc?pretty=true" -H 'Content-Type: application/json' -d'
-{
-    "title": "First Blood",
-    "year_released": 1982
-}'
-```
-
-Search for a movie:
-```sh
-curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type: application/json' -d'
+curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match": {
@@ -61,7 +41,6 @@ curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type:
     }
 }'
 ```
-
 
 ## 3. Set up an LTR feature store
 
@@ -111,7 +90,7 @@ Run `curl http://localhost:9200/_ltr/_featureset?pretty=true` to see registered 
 
 First, run a simple text query:
 ```sh
-curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type: application/json' -d'
+curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
     "query": {
         "match": {
@@ -123,7 +102,7 @@ curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type:
 
 Now, run a query with an SLTR filter to get logged features back:
 ```sh
-curl -X GET "http://localhost:9200/movies/_search?pretty=true" -H 'Content-Type: application/json' -d'
+curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "query": {
       "bool": {

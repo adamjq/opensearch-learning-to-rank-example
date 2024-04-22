@@ -1,0 +1,42 @@
+{
+    "mappings": {
+        "properties": {
+            "id": {
+                "type": "keyword"
+            },
+            "title": {
+                "type": "text"
+            },
+            "poster_path": {
+                "type": "keyword"
+            },
+            "overview": {
+                "type": "text"
+            },
+            "tagline": {
+                "type": "text"
+            },
+            "directors": {
+                "type": "keyword"
+            },
+            "cast": {
+                "type": "text"
+            },
+            "genres": {
+                "type": "keyword"
+            },
+            "release_date": {
+                "type": "date"
+            },
+            "vote_average": {
+                "type": "float"
+            },
+            "vote_count": {
+                "type": "integer"
+            },
+            "revenue": {
+                "type": "long"
+            }
+        }
+    }
+}

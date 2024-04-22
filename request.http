@@ -10,55 +10,8 @@ GET {{os_base_url}}/_cat/plugins?v=true&pretty
 
 ### Opensearch Queries
 
-### Create Movies index with explicit mapping
-PUT {{os_base_url}}/movies
-Content-Type: application/json
-
-{
-    "mappings": {
-        "properties": {
-            "title": { "type": "text" },
-            "description": { "type": "text" },
-            "year_released": { "type": "integer" }
-        }
-    }
-}
-
-# ### Drop Movies index
-# DELETE {{os_base_url}}/movies
-
-### Index movie
-POST {{os_base_url}}/movies/_doc
-Content-Type: application/json
-
-{
-    "title": "First Blood",
-    "description": "First Blood is a 1982 American-Canadian action directed by Ted Kotcheff and co-written by and starring Sylvester Stallone as Vietnam War veteran John Rambo.",
-    "year_released": 1982
-}
-
-### Index another movie
-POST {{os_base_url}}/movies/_doc
-Content-Type: application/json
-
-{
-    "title": "Rambo III",
-    "description": "Rambo mounts a one-man mission to rescue his friend Colonel Trautman from the clutches of the formidable invading Soviet forces in Afghanistan.",
-    "year_released": 1988
-}
-
-### Index another movie
-POST {{os_base_url}}/movies/_doc
-Content-Type: application/json
-
-{
-    "title": "Rambo: First Blood Part II",
-    "description": "Rambo returns to the jungles of Vietnam on a mission to infiltrate an enemy base-camp and rescue the American POWs still held captive there.",
-    "year_released": 1985
-}
-
 ### Search for title
-GET {{os_base_url}}/movies/_search
+GET {{os_base_url}}/tmdb/_search
 Content-Type: application/json
 
 {
@@ -77,7 +30,7 @@ POST {{os_base_url}}/_ltr/_featureset/moviefeatureset
 Content-Type: application/json
 
 {
-   "featureset": {
+    "featureset": {
         "features": [
             {
                 "name": "title_query",
@@ -104,7 +57,7 @@ Content-Type: application/json
                 }
             }
         ]
-   }
+    }
 }
 
 ### LTR - List all features in the featureset
@@ -114,35 +67,35 @@ GET {{os_base_url}}/_ltr/_featureset
 # DELETE {{os_base_url}}/_ltr
 
 ### LTR Feature Logging - SLTR Query
-GET {{os_base_url}}/movies/_search
+GET {{os_base_url}}/tmdb/_search
 Content-Type: application/json
 
 {
-  "query": {
-      "bool": {
-        "must": { 
-            "match": {
-                "title": "First"
-            }
-        },
-        "filter" : [
-            {
-                "sltr" : {
-                    "featureset" : "moviefeatureset",
-                    "_name": "logged_featureset",
-                    "active_features" : [ 
-                        "title_query",
-                        "description_query"
-                    ],
-                    "params": {
-                        "query_text": "First"
+    "query": {
+        "bool": {
+            "must": { 
+                "match": {
+                    "title": "First"
+                }
+            },
+            "filter" : [
+                {
+                    "sltr" : {
+                        "featureset" : "moviefeatureset",
+                        "_name": "logged_featureset",
+                        "active_features" : [ 
+                            "title_query",
+                            "description_query"
+                        ],
+                        "params": {
+                            "query_text": "First"
+                        }
                     }
                 }
-            }
-        ]
-      }
-  },
-  "ext": {
+            ]
+        }
+    },
+    "ext": {
         "ltr_log": {
             "log_specs": {
                 "name": "log_entry1",
@@ -153,36 +106,36 @@ Content-Type: application/json
 }
 
 ### LTR Feature Logging - SLTR Query with profiling
-GET {{os_base_url}}/movies/_search
+GET {{os_base_url}}/tmdb/_search
 Content-Type: application/json
 
 {
-  "profile": true,  
-  "query": {
-      "bool": {
-        "must": { 
-            "match": {
-                "title": "First"
-            }
-        },
-        "filter" : [
-            {
-                "sltr" : {
-                    "featureset" : "moviefeatureset",
-                    "_name": "logged_featureset",
-                    "active_features" : [ 
-                        "title_query",
-                        "description_query"
-                    ],
-                    "params": {
-                        "query_text": "First"
+    "profile": true,  
+    "query": {
+        "bool": {
+            "must": { 
+                "match": {
+                    "title": "First"
+                }
+            },
+            "filter" : [
+                {
+                    "sltr" : {
+                        "featureset" : "moviefeatureset",
+                        "_name": "logged_featureset",
+                        "active_features" : [ 
+                            "title_query",
+                            "description_query"
+                        ],
+                        "params": {
+                            "query_text": "First"
+                        }
                     }
                 }
-            }
-        ]
-      }
-  },
-  "ext": {
+            ]
+        }
+    },
+    "ext": {
         "ltr_log": {
             "log_specs": {
                 "name": "log_entry1",
@@ -194,7 +147,7 @@ Content-Type: application/json
 
 
 ### LTR Feature Logging - SLTR Query with rescore
-GET {{os_base_url}}/movies/_search
+GET {{os_base_url}}/tmdb/_search
 Content-Type: application/json
 
 {
