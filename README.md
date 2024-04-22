@@ -194,3 +194,5 @@ Things to note:
 - [Elasticsearch Learning to Rank: the documentation](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html)
 - [Learning to Rank for Amazon OpenSearch Service (AWS)](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/learning-to-rank.html)
 - [Working with plugins (Opensearch)](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker#working-with-plugins)
+- [Example LTR judgement list for movies](https://github.com/o19s/elasticsearch-ltr-demo/blob/master/train/movie_judgments.txt)
+
