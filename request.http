@@ -25,46 +25,11 @@ Content-Type: application/json
 ### LTR - Initialise default feature store
 PUT {{os_base_url}}/_ltr
 
-### LTR - Initialise moviefeatureset Feature Set
-POST {{os_base_url}}/_ltr/_featureset/moviefeatureset
-Content-Type: application/json
-
-{
-    "featureset": {
-        "features": [
-            {
-                "name": "title_query",
-                "params": [
-                    "query_text"
-                ],
-                "template_language": "mustache",
-                "template": {
-                    "match": {
-                        "title": "{{query_text}}"
-                    }
-                }
-            },
-            {
-                "name": "description_query",
-                "params": [
-                    "query_text"
-                ],
-                "template_language": "mustache",
-                "template": {
-                    "match": {
-                        "description": "{{query_text}}"
-                    }
-                }
-            }
-        ]
-    }
-}
-
 ### LTR - List all features in the featureset
 GET {{os_base_url}}/_ltr/_featureset
 
-# ### Delete default feature store
-# DELETE {{os_base_url}}/_ltr
+### Delete default feature store
+DELETE {{os_base_url}}/_ltr
 
 ### LTR Feature Logging - SLTR Query
 GET {{os_base_url}}/tmdb/_search
@@ -85,7 +50,7 @@ Content-Type: application/json
                         "_name": "logged_featureset",
                         "active_features" : [ 
                             "title_query",
-                            "description_query"
+                            "overview_query"
                         ],
                         "params": {
                             "query_text": "First"
@@ -125,7 +90,7 @@ Content-Type: application/json
                         "_name": "logged_featureset",
                         "active_features" : [ 
                             "title_query",
-                            "description_query"
+                            "overview_query"
                         ],
                         "params": {
                             "query_text": "First"
@@ -166,7 +131,7 @@ Content-Type: application/json
                     "_name": "logged_featureset",
                     "active_features" : [ 
                         "title_query",
-                        "description_query"
+                        "overview_query"
                     ],
                     "params": {
                         "query_text": "First"

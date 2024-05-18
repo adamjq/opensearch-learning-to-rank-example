@@ -5,6 +5,16 @@ This repo is intended as for educational purposes. It contains the steps needed 
 
 The best way to understand LTR is to [read the official docs here](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html).
 
+## Install
+
+Project install:
+```sh
+pyenv local 3.12
+poetry env use 3.12
+poetry install
+```
+
+
 ## Requirements
 - Docker
 - [opensearch-plugin CLI tool](https://opensearch.org/docs/latest/install-and-configure/plugins/)
@@ -51,37 +61,7 @@ curl -X PUT "http://localhost:9200/_ltr?pretty=true" -H 'Content-Type: applicati
 
 Create a feature set called `moviefeatureset`:
 ```sh
-curl -X POST "http://localhost:9200/_ltr/_featureset/moviefeatureset?pretty=true" -H 'Content-Type: application/json' -d'
-{
-   "featureset": {
-        "features": [
-            {
-                "name": "title_query",
-                "params": [
-                    "query_text"
-                ],
-                "template_language": "mustache",
-                "template": {
-                    "match": {
-                        "title": "{{query_text}}"
-                    }
-                }
-            },
-            {
-                "name": "description_query",
-                "params": [
-                    "query_text"
-                ],
-                "template_language": "mustache",
-                "template": {
-                    "match": {
-                        "description": "{{query_text}}"
-                    }
-                }
-            }
-        ]
-   }
-}'
+curl -X PUT "http://localhost:9200/_ltr/_featureset/moviefeatureset?pretty=true" -H 'Content-Type: application/json' -d '@featureset.json'
 ```
 
 Run `curl http://localhost:9200/_ltr/_featureset?pretty=true` to see registered features in the featureset.
@@ -100,94 +80,17 @@ curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" -H 'Content-Type: a
 }'
 ```
 
-Now, run a query with an SLTR filter to get logged features back:
-```sh
-curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" -H 'Content-Type: application/json' -d'
-{
-  "query": {
-      "bool": {
-        "filter" : [
-            {
-                "sltr" : {
-                    "featureset" : "moviefeatureset",
-                    "_name": "logged_featureset",
-                    "active_features" : [ 
-                        "title_query",
-                        "description_query"
-                    ],
-                    "params": {
-                        "query_text": "First"
-                    }
-                }
-            }
-        ]
-      }
-  },
-  "ext": {
-        "ltr_log": {
-            "log_specs": {
-                "name": "log_entry1",
-                "named_query": "logged_featureset"
-            }
-        }
-    }
-}'
-```
+Run the feature logging job:
 
-Result:
-```json
-{
-  "took": 2,
-  "timed_out": false,
-  "_shards": {
-    "total": 1,
-    "successful": 1,
-    "skipped": 0,
-    "failed": 0
-  },
-  "hits": {
-    "total": {
-      "value": 1,
-      "relation": "eq"
-    },
-    "max_score": 0.0,
-    "hits": [
-      {
-        "_index": "movies",
-        "_id": "rfzam40Bbf4EFOUV1cUr",
-        "_score": 0.0,
-        "_source": {
-          "title": "First Blood",
-          "year_released": 1982
-        },
-        "fields": {
-          "_ltrlog": [
-            {
-              "log_entry1": [
-                {
-                  "name": "title_query",
-                  "value": 0.2876821
-                },
-                {
-                  "name": "description_query"
-                }
-              ]
-            }
-          ]
-        },
-        "matched_queries": [
-          "logged_featureset"
-        ]
-      }
-    ]
-  }
-}
+```sh
+poetry shell
+python train/log_features.py
 ```
 
 Things to note:
 - Logged feature values in `"_ltrlog"`
 - Feature logging score returned for `title_query`
-- Feature log result returned for `description_query` with no score. This is because we originally indexed a document without a description field.
+- Feature log result returned for `overview_query` with no score. This is because we originally indexed a document without a description field.
 - Nothing at all logged for `year_released`. This is because it was never registered as a feature of interest in the featureset.
 
 ## Resources

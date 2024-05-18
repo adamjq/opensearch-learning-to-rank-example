@@ -26,6 +26,11 @@ services:
       - 9600:9600 # Performance Analyzer
     networks:
       - opensearch-net
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data # Persistent volume for storing OpenSearch data
 
 networks:
   opensearch-net:
+
+volumes:
+  opensearch-data: 

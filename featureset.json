@@ -1,0 +1,172 @@
+{
+    "featureset": {
+        "features": [
+            {
+                "name": "title_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "title": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "overview_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "overview": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "title_phrase_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match_phrase": {
+                        "title": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "overview_phrase_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match_phrase": {
+                        "overview": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "director_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "directors": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "genre_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "genres": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "cast_query",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "match": {
+                        "cast": "{{query_text}}"
+                    }
+                }
+            },
+            {
+                "name": "release_date_boost",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "function_score": {
+                        "query": {
+                            "match": {
+                                "title": "{{query_text}}"
+                            }
+                        },
+                        "functions": [
+                            {
+                                "exp": {
+                                    "release_date": {
+                                        "origin": "now",
+                                        "scale": "365d",
+                                        "decay": 0.5
+                                    }
+                                }
+                            }
+                        ],
+                        "boost_mode": "multiply"
+                    }
+                }
+            },
+            {
+                "name": "vote_average_boost",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "function_score": {
+                        "query": {
+                            "match": {
+                                "title": "{{query_text}}"
+                            }
+                        },
+                        "functions": [
+                            {
+                                "field_value_factor": {
+                                    "field": "vote_average",
+                                    "factor": 1.2,
+                                    "modifier": "sqrt",
+                                    "missing": 1
+                                }
+                            }
+                        ],
+                        "boost_mode": "multiply"
+                    }
+                }
+            },
+            {
+                "name": "revenue_boost",
+                "params": [
+                    "query_text"
+                ],
+                "template_language": "mustache",
+                "template": {
+                    "function_score": {
+                        "query": {
+                            "match": {
+                                "title": "{{query_text}}"
+                            }
+                        },
+                        "functions": [
+                            {
+                                "field_value_factor": {
+                                    "field": "revenue",
+                                    "factor": 1.1,
+                                    "modifier": "sqrt",
+                                    "missing": 1
+                                }
+                            }
+                        ],
+                        "boost_mode": "multiply"
+                    }
+                }
+            }
+        ]
+    }
+}
