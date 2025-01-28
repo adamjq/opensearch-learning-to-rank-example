@@ -26,8 +26,8 @@ NOTE: To use the OpenSearch image with a custom plugin, you must first create a 
 - [Working with plugins (Opensearch)](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker#working-with-plugins)
 - [Installing (LTR official docs)](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html#installing)
 
-- Opensearch version: `2.5`
-- LTR Plugin `v2.1.0` (compatible with OS 2.5). See [plugin release history on GitHub](https://github.com/opensearch-project/opensearch-learning-to-rank-base/releases).
+- Opensearch version: `2.18.0`
+- LTR Plugin `v2.18.0` (compatible with OS 2.15.0). See [plugin release history on GitHub](https://github.com/opensearch-project/opensearch-learning-to-rank-base/releases).
 
 Run:
 - `docker compose up`
@@ -68,16 +68,16 @@ Run `curl http://localhost:9200/_ltr/_featureset?pretty=true` to see registered 
 
 ## 4. Run a query to get logged features
 
-First, run a simple text query:
+First, run a python script to generate an example query with SLTR feature logging:
+```py
+python save_query.py "First Blood"
+```
+
+Then, run the query:
 ```sh
-curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" -H 'Content-Type: application/json' -d'
-{
-    "query": {
-        "match": {
-            "title": "First"
-        }
-    }
-}'
+curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" \
+  -H 'Content-Type: application/json' \
+  -d @example-ltr.json
 ```
 
 Run the feature logging job:
