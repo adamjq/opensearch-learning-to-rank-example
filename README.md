@@ -93,6 +93,37 @@ Things to note:
 - Feature log result returned for `overview_query` with no score. This is because we originally indexed a document without a description field.
 - Nothing at all logged for `year_released`. This is because it was never registered as a feature of interest in the featureset.
 
+## 5. Train an XGBoost model
+
+```sh
+poetry shell
+python train/train.py
+```
+
+Inspect the model at `train/model/model.json`.
+
+## 6. Upload the model to Opensearch
+
+```sh
+curl -X POST "http://localhost:9200/_ltr/_featureset/moviefeatureset/_createmodel" \
+  -H 'Content-Type: application/json' \
+  -d @train/model/os_model.json
+```
+
+## 7. Run a query with the model
+
+```sh
+poetry shell
+python save_query.py "First Blood" --rescore
+```
+
+Then, run the query:
+```sh
+curl -X GET "http://localhost:9200/tmdb/_search?pretty=true" \
+  -H 'Content-Type: application/json' \
+  -d @example-ltr-rescore.json
+```
+
 ## Resources
 - [Elasticsearch Learning to Rank: the documentation](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html)
 - [Learning to Rank for Amazon OpenSearch Service (AWS)](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/learning-to-rank.html)
