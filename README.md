@@ -1,7 +1,7 @@
-# Opnesearch Learning-to-Rank POC
+# OpenSearch Learning-to-Rank POC
 
 This repo is intended as for educational purposes. It contains the steps needed to get a working implementation of the
-[Opensearch Learning to Rank Plugin](https://github.com/o19s/elasticsearch-learning-to-rank) working locally with a dockerized version of Opensearch.
+[OpenSearch Learning to Rank Plugin](https://github.com/o19s/elasticsearch-learning-to-rank) working locally with a dockerized version of OpenSearch.
 
 The best way to understand LTR is to [read the official docs here](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html).
 
@@ -27,7 +27,7 @@ NOTE: To use the OpenSearch image with a custom plugin, you must first create a 
 - [Installing (LTR official docs)](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html#installing)
 
 - Opensearch version: `2.18.0`
-- LTR Plugin `v2.18.0` (compatible with OS 2.15.0). See [plugin release history on GitHub](https://github.com/opensearch-project/opensearch-learning-to-rank-base/releases).
+- LTR Plugin `v2.18.0` (compatible with OS 2.18.0). See [plugin release history on GitHub](https://github.com/opensearch-project/opensearch-learning-to-rank-base/releases).
 
 Run:
 - `docker compose up`
